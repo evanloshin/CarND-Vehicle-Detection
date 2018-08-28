@@ -92,7 +92,7 @@ def draw_labeled_bboxes(img, labels):
 
 # Define a single function that can extract features
 # using hog sub-sampling and make predictions
-def find_cars(img, color_conv, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_size, hist_bins, heat_thresh):
+def find_cars(img, color_conv, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_size, hist_bins):
     draw_img = np.copy(img)
     img = img.astype(np.float32) / 255
 
@@ -159,17 +159,7 @@ def find_cars(img, color_conv, ystart, ystop, scale, svc, X_scaler, orient, pix_
                 box_list.append(((xbox_left, ytop_draw + ystart),
                                  (xbox_left + win_draw, ytop_draw + win_draw + ystart)))
 
-    # create heat map of detections
-    heat = np.zeros_like(draw_img[:, :, 0]).astype(np.float)
-    heat = add_heat(heat, box_list)
-    heat = apply_threshold(heat, heat_thresh)
-    heatmap = np.clip(heat, 0, 255)
-
-    # draw final boxes based on heat map
-    labels = label(heatmap)
-    draw_img = draw_labeled_bboxes(draw_img, labels)
-
-    return draw_img
+    return box_list
 
 
 # Define a function to extract features from a list of images
