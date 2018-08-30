@@ -22,10 +22,10 @@ The goals / steps of this project are the following:
 [image7]: ./examples/output_bboxes.png
 [video1]: ./project_video.mp4
 
-## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
-#### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
-
 ---
+
+## Grading Rubric
+#### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/513/view) individually and describe how I addressed each point in my implementation.
 
 ### Histogram of Oriented Gradients (HOG)
 
@@ -33,7 +33,7 @@ The goals / steps of this project are the following:
 
 The code for this step is contained in the function *?????* of [functions.py](https://github.com/evanloshin/CarND-Vehicle-Detection/blob/master/functions.py).
 
-First I read in all the **vehicle** and **non-vehicle** training images. Here's some examples of what they look like. 
+First I read in all the *vehicle* and *non-vehicle* training images. Here's some examples of what they look like. 
 
 ![alt text][image1]
 
