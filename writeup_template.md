@@ -1,17 +1,15 @@
-## Writeup Template
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
+# Vehicle Detection
+### This project identifies lanes and vehicles in driving video taken from a single front-facing camera. This is the final project in term one of Udacity's Self-Driving Car Nanodegree.
 
 ---
 
-**Vehicle Detection Project**
-
 The goals / steps of this project are the following:
 
-* Perform a Histogram of Oriented Gradients (HOG) feature extraction on a labeled training set of images and train a classifier Linear SVM classifier
-* Optionally, you can also apply a color transform and append binned color features, as well as histograms of color, to your HOG feature vector. 
-* Note: for those first two steps don't forget to normalize your features and randomize a selection for training and testing.
-* Implement a sliding-window technique and use your trained classifier to search for vehicles in images.
-* Run your pipeline on a video stream (start with the test_video.mp4 and later implement on full project_video.mp4) and create a heat map of recurring detections frame by frame to reject outliers and follow detected vehicles.
+* Perform a Histogram of Oriented Gradients (HOG) feature extraction on a labeled training set of images.
+* Apply a color transform and append binned color features, as well as histograms of color, to the HOG feature vector.
+* Train a Linear SVM classifier with the full feature vectors to detect vehicles.
+* Implement a sliding-window technique and use the trained classifier to search for vehicles in images.
+* Run the pipeline on a [video stream](https://github.com/evanloshin/CarND-Vehicle-Detection/blob/master/project_video.mp4) and create a heat map of recurring detections frame by frame to reject outliers and follow detected vehicles.
 * Estimate a bounding box for vehicles detected.
 
 [//]: # (Image References)
@@ -24,46 +22,46 @@ The goals / steps of this project are the following:
 [image7]: ./examples/output_bboxes.png
 [video1]: ./project_video.mp4
 
-## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
-### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
-
 ---
-### Writeup / README
 
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Vehicle-Detection/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
-
-You're reading it!
+## Grading Rubric
+#### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/513/view) individually and describe how I addressed each point in my implementation.
 
 ### Histogram of Oriented Gradients (HOG)
 
 #### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-The code for this step is contained in the first code cell of the IPython notebook (or in lines # through # of the file called `some_file.py`).  
+The code for this step is contained in the function *?????* of [functions.py](https://github.com/evanloshin/CarND-Vehicle-Detection/blob/master/functions.py).
 
-I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
+First I read in all the *vehicle* and *non-vehicle* training images. Here's some examples of what they look like. 
 
 ![alt text][image1]
 
-I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
+I then explored how different color spaces and parameters affect the extraction of HOG features using `skimage.hog()`. I grabbed random images from each of the two classes and displayed them to get a feel for what the HOG output looks like. While exploring colorspaces, I held constant the HOG parameters `orientations`, `pixels_per_cell`, and `cells_per_block` and visa versa.
 
-Here is an example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
-
+Here is an example using the `YUV` color space and HOG parameters `orientations=8`, `pixels_per_cell=(8, 8)`, `cells_per_block=(2, 2)`, and `spatial_size=(32, 32)`:
 
 ![alt text][image2]
 
-#### 2. Explain how you settled on your final choice of HOG parameters.
-
-I tried various combinations of parameters and...
-
-#### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
+#### 2. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
 I trained a linear SVM using...
+
+With the SVM implemented, I tried several combinations of colorspaces and parameters to tune the model. Here are some of the intermediate paramters and their outcomes.
+
+XXXXXXXXXX
+XXXXXXXXXX
+XXXXXXXXXX
+
+The best parameters I retained for creating feature vectors are XXXXXX.
 
 ### Sliding Window Search
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
+I implement a sliding window search in function `find_cars()` of [functions.py](https://github.com/evanloshin/CarND-Vehicle-Detection/blob/master/functions.py).
+
+Search parameters include `y_start_stop`, `, XXXXX. Here are several intermediary results from tuning the search function:
 
 ![alt text][image3]
 
@@ -104,5 +102,13 @@ Here's an example result showing the heatmap from a series of frames of video, t
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+Overall, my pipeline...
+
+A few opportunities exist to further improve my implementation of the project.
+
+For starters, addressing overfitting would benefit the project. The SVC accuracy is very high (>99%) even on a smaller samples of the data. Udacity points out the supplied training data includes time-series images, so accuracy is being calculated on test images nearly identical to those in the training set. At present, this pipeline does not implement a solution to deal with the time-series data.
+
+Also, the final video detects the black colored vehicle more reliably than the white one. Given a solution to overfitting, a fresh examination of which color channels to include in the feature vector might better amplify white cars. If that's not sufficient, another fix is gathering additional labeled images of white cars for training the SVC model.
+
+Last, poor code performance could severely impact this project's applicability to actual self-driving cars. My pipeline averages 0.06 frames per second, mostly attributed to sklearn's HOG function, but optimizing my code could bring some improvement. While industry sampling rates are not publicly known, any rate less than 1 frame per second is clearly insufficient. Granted the compute in today's autonomous vehicles exceeds my circa 2010 MacBook, they handle many other tasks. A neural network approach would reduce processing time by eliminating HOG gradients entirely, but not without the tradeoff of replacing a clearly interpretable approach with a somewhat ambigous black box.
 
