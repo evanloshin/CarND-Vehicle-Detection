@@ -2,7 +2,6 @@ import numpy as np
 import cv2
 import matplotlib.image as mpimg
 from skimage.feature import hog
-from scipy.ndimage.measurements import label
 
 
 # convert an image to new cv2 color space

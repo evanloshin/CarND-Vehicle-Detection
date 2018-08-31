@@ -9,6 +9,7 @@ from sklearn.utils import shuffle
 from sklearn.svm import LinearSVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
+from scipy.ndimage.measurements import label
 
 ################### HYPERPARAMETERS ###################
 color_space = 'YUV' # Can be YUV or YCrCb
@@ -78,6 +79,10 @@ print(round(t2-t, 2), 'Seconds to train SVC...')
 # Check the score of the SVC
 print('Test Accuracy of SVC = ', round(svc.score(X_test, y_test), 4))
 
+
+
+
+
 current_img = mpimg.imread('test_images/test1.jpg')
 # Define an list to hold window coordinates
 windows = []
@@ -91,7 +96,6 @@ for scale in scale_factor:
 # create heat map of all detections
 heat = np.zeros_like(current_img[:, :, 0]).astype(np.float)
 heat = add_heat(heat, windows)
-heat0 = np.copy(heat)
 heat = apply_threshold(heat, heatmap_threshold)
 heatmap = np.clip(heat, 0, 255)
 
@@ -101,8 +105,4 @@ labels = label(heatmap)
 draw_img = draw_labeled_bboxes(draw_img, labels)
 
 plt.imshow(draw_img)
-plt.show()
-plt.imshow(heat)
-plt.show()
-plt.imshow(heat0)
 plt.show()

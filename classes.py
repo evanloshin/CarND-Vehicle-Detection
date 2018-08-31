@@ -2,9 +2,19 @@
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
+from collections import deque
 # import project dependencies
-import functions_vehicles_only as fn
+from functions import *
 
+class movingAverage():
+
+    ## constructor
+    def __init__(self, nb_periods):
+        self.queue = deque(maxlen=nb_periods)
+
+    def next(self, val):
+        self.queue.append(val)
+        return list(self.queue)
 
 class undistorter():
 
@@ -119,7 +129,7 @@ class laneFinder():
     ### no return
     def generate_unit_conversion(self, binary_img, lane_width_meters=3.7, lane_distance_meters=12):
         # grab lane centers
-        lane_centers = fn.find_center_points(binary_img)
+        lane_centers = find_center_points(binary_img)
         # calculate lane width in pixels
         pixel_width = lane_centers[1] - lane_centers[0]
         # calculate conversion factors
@@ -133,7 +143,7 @@ class laneFinder():
 
         binary_img = np.copy(binary_image)
         # grab lane centers
-        lane_centers = fn.find_center_points(binary_img)
+        lane_centers = find_center_points(binary_img)
         # use centers as starting point for windows
         left_window_base = lane_centers[0]
         right_window_base = lane_centers[1]
