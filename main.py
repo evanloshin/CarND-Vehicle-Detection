@@ -7,7 +7,7 @@ import matplotlib.image as mpimg
 import time
 import glob
 from sklearn.utils import shuffle
-from sklearn.svm import LinearSVC
+from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from moviepy.editor import VideoFileClip
@@ -48,10 +48,10 @@ def main(argv):
     spatial_feat = True  # Spatial features on or off
     hist_feat = True  # Histogram features on or off
     hog_feat = True  # HOG features on or off
-    y_start_stop = [400, 650]  # Min and max in y to search in slide_window()
-    scale_factor = [0.6, 1.0, 1.4]  # scale factor for varying search window sizes
-    heatmap_threshold = 70
-    window_smoothing = 7 # moving average period for last n frames of windows
+    y_start_stop = [380, 650]  # Min and max in y to search in slide_window()
+    scale_factor = [1.0, 1.4, 1.8]  # scale factor for varying search window sizes
+    heatmap_threshold = 13
+    window_smoothing = 10 # moving average period for last n frames of windows
     #################### END VEHICLE DETECTION HYPERPARAMETERS #####################
 
 
@@ -82,7 +82,7 @@ def main(argv):
     # to speed up pipeline
     cars = shuffle(cars)
     notcars = shuffle(notcars)
-    # sample_size = 3000
+    # sample_size = 2000
     # cars = cars[0:sample_size]
     # notcars = notcars[0:sample_size]
 
@@ -117,7 +117,7 @@ def main(argv):
     X_test = X_scaler.transform(X_test)
 
     # Use a linear SVC
-    svc = LinearSVC()
+    svc = SVC(kernel='linear', probability=True)
     # Check the training time for the SVC
     t = time.time()
     svc.fit(X_train, y_train)
@@ -171,7 +171,7 @@ def main(argv):
     # generate video
     output_file = 'output_videos/output_project_video_full.mp4'
     input_file = 'test_videos/project_video_copy.mp4'
-    clip = VideoFileClip(input_file)#.subclip(10, 30)
+    clip = VideoFileClip(input_file)#.subclip(15, 17)
     result = clip.fl_image(lambda frame: video_pipeline(frame, undist, txf, thresholds, lanes, lane_hyperparameters, svc, X_scaler, mvg_avg, vehicle_hyperparameters))
     result.write_videofile(output_file, audio=False)
 

@@ -226,7 +226,7 @@ def find_cars(img, color_conv, ystart, ystop, scale, svc, X_scaler, orient, pix_
     # 64 was the original sampling rate, with 8 cells and 8 pix per cell
     window = 64
     nblocks_per_window = (window // pix_per_cell) - cell_per_block + 1
-    cells_per_step = 2  # Instead of overlap, define how many cells to step
+    cells_per_step = 4  # Instead of overlap, define how many cells to step
     nxsteps = (nxblocks - nblocks_per_window) // cells_per_step + 1
     nysteps = (nyblocks - nblocks_per_window) // cells_per_step + 1
 
@@ -262,9 +262,9 @@ def find_cars(img, color_conv, ystart, ystop, scale, svc, X_scaler, orient, pix_
             test_features = X_scaler.transform(
                 np.hstack((spatial_features, hist_features, hog_features)).reshape(1, -1))
             # test_features = X_scaler.transform(np.hstack((shape_feat, hist_feat)).reshape(1, -1))
-            test_prediction = svc.predict(test_features)
+            test_prediction = svc.predict_proba(test_features)
 
-            if test_prediction == 1:
+            if test_prediction[0,1] > 0.9:
                 xbox_left = np.int(xleft * scale)
                 ytop_draw = np.int(ytop * scale)
                 win_draw = np.int(window * scale)
