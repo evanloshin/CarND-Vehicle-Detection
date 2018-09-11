@@ -62,6 +62,7 @@ With the SVM implemented, I tried several combinations of colorspaces and parame
 |   #2  |     HLS    |       8      |    (8,8)    |   (32,32)   |  98.38%  |
 |   #3  |     YUV    |       8      |    (8,8)    |   (32,32)   |  98.75%  |
 |   #4  |     YUV    |       8      |    (8,8)    |   (16,16)   |  98.88%  |
+
 **Ran with a 2,000 image subset of the data for comparison. The final result uses the whole dataset for better accuracy.*
 
 ### Sliding Window Search
