@@ -123,11 +123,13 @@ class laneFinder():
         self.y_right = None
         # middle curve
         self.middle_x = None
+        # moving average for radius measurement
+        self.recent_r = movingAverage(10)
 
 
     ### generate pixel to meter conversions based on a sample image
     ### no return
-    def generate_unit_conversion(self, binary_img, lane_width_meters=3.7, lane_distance_meters=12):
+    def generate_unit_conversion(self, binary_img, lane_width_meters=3.7, lane_distance_meters=10):
         # grab lane centers
         lane_centers = find_center_points(binary_img)
         # calculate lane width in pixels
@@ -216,7 +218,7 @@ class laneFinder():
         y_eval = np.max(self.left_lane.plot_y)
         r = ((1 + (2 * coeff[0] * y_eval * self.my + coeff[1]) ** 2) ** 1.5) / abs(
             2 * coeff[0])
-        return r
+        return np.average(self.recent_r.next(r))
 
 
 
@@ -236,12 +238,8 @@ class laneFinder():
         # Draw center line onto image
         cv2.polylines(warped_lanes, np.int_([middle_pts]), False, (0,255,0), thickness=5)
         # Highlight the detected lane pixels
-        for i in range(2):
-            warped_lanes[self.y_left, self.x_left + i] = [255, 0, 0]
-            warped_lanes[self.y_left, self.x_left - i] = [255, 0, 0]
-        for i in range(7):
-            warped_lanes[self.y_right, self.x_right + i] = [0, 0, 255]
-            warped_lanes[self.y_right, self.x_right - i] = [0, 0, 255]
+        warped_lanes[self.y_left, self.x_left] = [255, 0, 0]
+        warped_lanes[self.y_right, self.x_right] = [0, 0, 255]
         # Warp the blank back to original image space
         unwarped = transformer_obj.unwarp(warped_lanes)
         # Combine the result with the original image

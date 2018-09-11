@@ -82,7 +82,7 @@ def main(argv):
     # to speed up pipeline
     cars = shuffle(cars)
     notcars = shuffle(notcars)
-    # sample_size = 2000
+    # sample_size = 100
     # cars = cars[0:sample_size]
     # notcars = notcars[0:sample_size]
 
@@ -146,7 +146,7 @@ def main(argv):
     # create perspective transformation matrix
     print('Creating detection pipeline...')
     cal = undist.undistort(np.copy(Examples[0]))
-    mask = np.int32([[[597, 450], [680, 450], [1020, 675], [290, 675]]])
+    mask = np.int32([[[582, 450], [665, 450], [1005, 675], [275, 675]]])
     txf = transformer(cal, mask, x_offset, y_offset)
     txf.create_transformation()
     #txf.plot_mask() # visual aid for determining coordinates
@@ -169,8 +169,8 @@ def main(argv):
     ### VIDEO PIPELINE ###
 
     # generate video
-    output_file = 'output_videos/output_project_video_full.mp4'
-    input_file = 'test_videos/project_video_copy.mp4'
+    output_file = 'output_videos/challenge_video_output.mp4'
+    input_file = 'test_videos/challenge_video.mp4'
     clip = VideoFileClip(input_file)#.subclip(15, 17)
     result = clip.fl_image(lambda frame: video_pipeline(frame, undist, txf, thresholds, lanes, lane_hyperparameters, svc, X_scaler, mvg_avg, vehicle_hyperparameters))
     result.write_videofile(output_file, audio=False)
